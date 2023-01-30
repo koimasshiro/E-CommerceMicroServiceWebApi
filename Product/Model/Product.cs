@@ -2,7 +2,7 @@
 
 namespace ProductAPI.Model
 {
-	public class ProductModel
+	public class Product
 	{
 		[Key]
 		public int ProductId { get; set; }

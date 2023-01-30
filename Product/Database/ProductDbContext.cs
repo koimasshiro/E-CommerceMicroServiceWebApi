@@ -9,6 +9,6 @@ namespace ProductAPI.Database
 		{
 
 		}
-		public DbSet<ProductModel> Products => Set<ProductModel>();
+		public DbSet<Product> Products => Set<Product>();
 	}
 }

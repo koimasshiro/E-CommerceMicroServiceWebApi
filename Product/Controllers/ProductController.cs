@@ -20,13 +20,13 @@ namespace ProductAPI.Controllers
 		}
 
 		[HttpGet("GetAllProducts")]
-		public async Task<ActionResult<List<ProductModel>>> GetAllProducts()
+		public async Task<ActionResult<List<Product>>> GetAllProducts()
 		{
 			return await _productService.GetAllProducts();
 		}
 
 		[HttpGet("{id}")]
-		public async Task<ActionResult<ProductModel>> GetProductById(int id)
+		public async Task<ActionResult<Product>> GetProductById(int id)
 		{
 			var result = await _productService.GetProductById(id);
 
@@ -37,14 +37,14 @@ namespace ProductAPI.Controllers
 		}
 
 		[HttpPost("AddProduct")]
-		public async Task<ActionResult<List<ProductModel>>> AddProduct(ProductModel product)
+		public async Task<ActionResult<List<Product>>> AddProduct(Product product)
 		{
 			var result = await _productService.AddProduct(product);
 			return Ok(result);
 		}
 
 		[HttpPut("{id}")]
-		public async Task<ActionResult<List<ProductModel>>> UpdateProduct(int id, ProductModel request)
+		public async Task<ActionResult<List<Product>>> UpdateProduct(int id, Product request)
 		{
 			var result = await _productService.UpdateProduct(id, request);
 
@@ -55,7 +55,7 @@ namespace ProductAPI.Controllers
 		}
 
 		[HttpDelete("{id}")]
-		public async Task<ActionResult<List<ProductModel>>> DeleteProduct(int id)
+		public async Task<ActionResult<List<Product>>> DeleteProduct(int id)
 		{
 			var result = await _productService.DeleteProduct(id);
 

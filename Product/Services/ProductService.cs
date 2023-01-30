@@ -12,14 +12,14 @@ namespace ProductAPI.Services
 			_context = context;
 		}
 
-		public async Task<List<ProductModel>> AddProduct(ProductModel product)
+		public async Task<List<Product>> AddProduct(Product product)
 		{
 			_context.Products.Add(product);
 			await _context.SaveChangesAsync();
 			return await _context.Products.ToListAsync();
 		}
 
-		public async Task<List<ProductModel>>? DeleteProduct(int id)
+		public async Task<List<Product>>? DeleteProduct(int id)
 		{
 			var product = await _context.Products.FindAsync(id);
 
@@ -32,13 +32,13 @@ namespace ProductAPI.Services
 			return await _context.Products.ToListAsync();
 		}
 
-		public async Task<List<ProductModel>> GetAllProducts()
+		public async Task<List<Product>> GetAllProducts()
 		{
 			var products = await _context.Products.ToListAsync();
 			return products;
 		}
 
-		public async Task<ProductModel?> GetProductById(int id)
+		public async Task<Product?> GetProductById(int id)
 		{
 			var product = await _context.Products.FindAsync(id);
 			if (product is null)
@@ -47,7 +47,7 @@ namespace ProductAPI.Services
 			return product;
 		}
 
-		public async Task<List<ProductModel?>> UpdateProduct(int id, ProductModel request)
+		public async Task<List<Product?>> UpdateProduct(int id, Product request)
 		{
 			var product = await _context.Products.FindAsync(id);
 

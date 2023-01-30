@@ -5,10 +5,10 @@ namespace ProductAPI.Services
 {
 	public interface IProductService
 	{
-		Task<List<ProductModel>> GetAllProducts();
-		Task<ProductModel>? GetProductById(int id);
-		Task<List<ProductModel>> AddProduct(ProductModel product);
-		Task<List<ProductModel>>? UpdateProduct(int id, ProductModel request);
-		Task<List<ProductModel>>? DeleteProduct(int id);
+		Task<List<Product>> GetAllProducts();
+		Task<Product>? GetProductById(int id);
+		Task<List<Product>> AddProduct(Product product);
+		Task<List<Product>>? UpdateProduct(int id, Product request);
+		Task<List<Product>>? DeleteProduct(int id);
 	}
 }
