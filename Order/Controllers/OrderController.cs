@@ -16,6 +16,20 @@ namespace Order.Controllers
 			_context = context;
 		}
 
+
+		//Create new order
+		[HttpPost("CreateOrder")]
+		public async Task<IActionResult> PostAsync(OrderModel newOrder)
+		{
+			_context.Orders.Add(newOrder);
+			await _context.SaveChangesAsync();
+			return CreatedAtAction("Get", new
+			{
+				OrderId = newOrder.ProductId,
+			}, newOrder);
+		}
+		
+		//Get Orders by Id
 		[HttpGet("{id}")]
 		public async Task<IActionResult> GetAsync(int id)
 		{
@@ -27,24 +41,50 @@ namespace Order.Controllers
 			return Ok(order);
 		}
 
-		[HttpGet]
+
+		//Get all orders
+		[HttpGet("GetAllOrders")]
 		public async Task<IActionResult> GetAsync()
 		{
 			var orders = await _context.Orders.ToListAsync();
 			return Ok(orders);
 		}
 
-		[HttpPost]
-		public async Task<IActionResult> PostAsync(OrderModel newOrder)
+		//update an order
+		[HttpPut("{id}")]
+		public async Task<IActionResult> PutAsync(int id, OrderModel request)
 		{
-			_context.Orders.Add(newOrder);
+			var order = await _context.Orders.FindAsync(id);
+
+			if (order is null)
+				return NotFound("Order not Found");
+
+			order.ProductPrice = request.ProductPrice;
+			order.ProductName = request.ProductName;
+			order.ProductId = request.ProductId;
+			order.OrderDate = request.OrderDate;
+			order.UserId = request.UserId;
+
 			await _context.SaveChangesAsync();
-			return CreatedAtAction("Get", new
-			{
-				OrderId = newOrder.ProductId,
-			}, newOrder);
+
+			return Ok(await _context.Orders.ToListAsync());
+		}
+
+		//Delete an order
+		[HttpDelete("{id}")]
+		public async Task<IActionResult> DeleteAsync(int id)
+		{
+			var order = await _context.Orders.FindAsync(id);
+
+			if (order is null)
+				return NotFound("Order not found!");
+
+			_context.Orders.Remove(order);
+			await _context.SaveChangesAsync();
+
+			return Ok(await _context.Orders.ToListAsync());
 		}
 	}
-
+        
 
 }
