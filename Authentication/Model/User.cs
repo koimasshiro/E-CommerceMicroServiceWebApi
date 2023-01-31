@@ -27,4 +27,21 @@ namespace Auth.Model
 		public byte[] PasswordSalt { get; set; }
 
 	}
+	public class UserCreate
+	{
+
+		[Required]
+		public string? FirstName { get; set; }
+
+		[Required]
+		public string? LastName { get; set; }
+
+		[Required]
+		public string? Email { get; set; }
+
+		public byte[] PasswordHash { get; set; }
+
+		public byte[] PasswordSalt { get; set; }
+
+	}
 }

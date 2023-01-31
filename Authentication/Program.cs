@@ -1,4 +1,5 @@
 using Auth.Model;
+using Auth.Services;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -12,6 +13,8 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddDbContext<UserContext>(options =>
 	options.UseSqlServer(builder.Configuration.GetConnectionString("AuthDbConnection")));
+
+builder.Services.AddScoped<IAuth, AuthService >();
 
 var app = builder.Build();
 
