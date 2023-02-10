@@ -1,0 +1,95 @@
+{
+	"Routes": [
+		//Auth
+		{
+			"DownstreamPathTemplate": "/api/Auth/Signup",
+			"DownstreamScheme": "https",
+			"DownstreamHostAndPorts": [
+				{
+					"Host": "localhost",
+					"Port": 7210
+				}
+			],
+			"UpstreamPathTemplate": "/Auth/",
+			"UpstreamHttpMethod": [ "POST" ]
+		},
+		{
+			"DownstreamPathTemplate": "/api/Auth/Login",
+			"DownstreamScheme": "https",
+			"DownstreamHostAndPorts": [
+				{
+					"Host": "localhost",
+					"Port": 7210
+				}
+			],
+			"UpstreamPathTemplate": "/Auth/login",
+			"UpstreamHttpMethod": [ "POST" ]
+		},
+		//products
+		{
+			"DownstreamPathTemplate": "/api/Product",
+			"DownstreamScheme": "https",
+			"DownstreamHostAndPorts": [
+				{
+					"Host": "localhost",
+					"Port": 7197
+				}
+			],
+			"UpstreamPathTemplate": "/Products",
+			"UpstreamHttpMethod": [ "GET", "POST" ]
+		},
+		{
+			"DownstreamPathTemplate": "/api/Product/{id}",
+			"DownstreamScheme": "https",
+			"DownstreamHostAndPorts": [
+				{
+					"Host": "localhost",
+					"Port": 7197
+				}
+			],
+			"UpstreamPathTemplate": "/Products/{id}",
+			"UpstreamHttpMethod": [ "GET", "PUT", "DELETE" ]
+		},
+		//order
+		{
+			"DownstreamPathTemplate": "/api/Order",
+			"DownstreamScheme": "https",
+			"DownstreamHostAndPorts": [
+				{
+					"Host": "localhost",
+					"Port": 7199
+				}
+			],
+			"UpstreamPathTemplate": "/Orders",
+			"UpstreamHttpMethod": [ "GET", "POST" ]
+		},
+		{
+			"DownstreamPathTemplate": "/api/Order/{id}",
+			"DownstreamScheme": "https",
+			"DownstreamHostAndPorts": [
+				{
+					"Host": "localhost",
+					"Port": 7199
+				}
+			],
+			"UpstreamPathTemplate": "/Orders/{id}",
+			"UpstreamHttpMethod": [ "GET", "PUT", "DELETE" ]
+		},
+		//Payment
+		{
+			"DownstreamPathTemplate": "/api/Payment",
+			"DownstreamScheme": "https",
+			"DownstreamHostAndPorts": [
+				{
+					"Host": "localhost",
+					"Port": 7084
+				}
+			],
+			"UpstreamPathTemplate": "/Payment",
+			"UpstreamHttpMethod": [ "GET", "POST" ]
+		}
+	],
+	"GlobalConfiguration": {
+		"BaseUrl": "http://localhost:5242"
+	}
+}

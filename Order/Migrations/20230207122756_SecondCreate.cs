@@ -10,20 +10,25 @@ namespace OrderAPI.Migrations
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.AddColumn<double>(
-                name: "ProductPrice",
+            migrationBuilder.AlterColumn<int>(
+                name: "UserId",
                 table: "Orders",
-                type: "float",
+                type: "int",
                 nullable: false,
-                defaultValue: 0.0);
+                oldClrType: typeof(string),
+                oldType: "nvarchar(max)");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropColumn(
-                name: "ProductPrice",
-                table: "Orders");
+            migrationBuilder.AlterColumn<string>(
+                name: "UserId",
+                table: "Orders",
+                type: "nvarchar(max)",
+                nullable: false,
+                oldClrType: typeof(int),
+                oldType: "int");
         }
     }
 }

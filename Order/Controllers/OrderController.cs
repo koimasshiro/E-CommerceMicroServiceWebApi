@@ -1,7 +1,9 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using OrderAPI.Entities;
+using ProductAPI.Database;
 
 namespace Order.Controllers
 {
@@ -18,9 +20,9 @@ namespace Order.Controllers
 
 
 		//Create new order
-		[HttpPost("CreateOrder")]
+		[HttpPost]
 		public async Task<IActionResult> PostAsync(OrderModel newOrder)
-		{
+		{ 
 			_context.Orders.Add(newOrder);
 			await _context.SaveChangesAsync();
 			return CreatedAtAction("Get", new
@@ -43,7 +45,7 @@ namespace Order.Controllers
 
 
 		//Get all orders
-		[HttpGet("GetAllOrders")]
+		[HttpGet]
 		public async Task<IActionResult> GetAsync()
 		{
 			var orders = await _context.Orders.ToListAsync();
@@ -59,7 +61,6 @@ namespace Order.Controllers
 			if (order is null)
 				return NotFound("Order not Found");
 
-			order.ProductPrice = request.ProductPrice;
 			order.ProductName = request.ProductName;
 			order.ProductId = request.ProductId;
 			order.OrderDate = request.OrderDate;

@@ -19,7 +19,7 @@ namespace ProductAPI.Controllers
 			_productService = productService;
 		}
 
-		[HttpGet("GetAllProducts")]
+		[HttpGet]
 		public async Task<ActionResult<List<Product>>> GetAllProducts()
 		{
 			return await _productService.GetAllProducts();
@@ -36,7 +36,7 @@ namespace ProductAPI.Controllers
 			return Ok(result);
 		}
 
-		[HttpPost("AddProduct")]
+		[HttpPost]
 		public async Task<ActionResult<List<Product>>> AddProduct(Product product)
 		{
 			var result = await _productService.AddProduct(product);
@@ -64,7 +64,5 @@ namespace ProductAPI.Controllers
 
 			return Ok(result);
 		}
-
-
 	}
 }

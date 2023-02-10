@@ -12,8 +12,8 @@ using OrderAPI.Entities;
 namespace OrderAPI.Migrations
 {
     [DbContext(typeof(OrderDbContext))]
-    [Migration("20230130153541_SecondCreate")]
-    partial class SecondCreate
+    [Migration("20230207122335_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -40,10 +40,8 @@ namespace OrderAPI.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("ProductName")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<double>("ProductPrice")
-                        .HasColumnType("float");
 
                     b.Property<string>("UserId")
                         .IsRequired()

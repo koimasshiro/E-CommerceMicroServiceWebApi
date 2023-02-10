@@ -2,6 +2,8 @@
 using Auth.Model;
 using Auth.Services;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Cryptography;
@@ -14,13 +16,14 @@ namespace Auth.Controllers
 	{
 
 		private readonly IAuth _auth;
-
-		public AuthController(IAuth auth)
+		private readonly UserContext _context;
+		public AuthController(IAuth auth, UserContext context)
 		{
 			_auth = auth;
+			_context = context;
 		}
 
-		[HttpPost("SignUp")]
+		[HttpPost("Signup")]
 		public async Task<ActionResult<List<User>>> SignUp(SignupDto request)
 		{
 			var result = await _auth.SignUp(request);
@@ -28,27 +31,21 @@ namespace Auth.Controllers
 		}
 
 		[HttpPost("Login")]
-		public ActionResult<string> LogIn(LoginDto login)
+		public async Task<ActionResult<dynamic>> LogIn( LoginDto login)
 		{
-			
-			return Ok("Yaay!! You've been logged in successfully!!😄"); 
-	
+			var result = await _auth.LogIn(login);
+
+			return Ok(result);
 		}
 
-		//Create password Hash
-		//private static void CreatePasswordHash(string password, out byte[] passwordHash, out byte[] passwordSalt)
-		//{
-		//	using HMACSHA512 hmac = new();
-		//	passwordSalt = hmac.Key;
-		//	passwordHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
-		//}
+		//reset password
+		[HttpPost]
+		public async Task<List<User>> ResetPassword(int id, ResetPasswordDto request)
+		{
+			var result = await _auth.ResetPassword(id, request);
 
-		////Verify password
-		//private static bool VerifyPasswordHash(string password, byte[] passwordHash, byte[] passwordSalt)
-		//{
-		//	using HMACSHA512 hmac = new(passwordSalt);
-		//	var ComputedHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
-		//	return ComputedHash == passwordHash;
-		//}
+			return result;
+			
+		}
 	}
 }
