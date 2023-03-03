@@ -4,7 +4,9 @@ using Azure.Core;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using NPOI.SS.Formula.Eval;
 using NPOI.SS.Formula.Functions;
+using Org.BouncyCastle.Asn1.Ocsp;
 using ProductAPI.Model;
 using System.ComponentModel;
 using System.Linq;
@@ -15,13 +17,12 @@ namespace Auth.Services
 {
 	public class AuthService : IAuth
 	{
-		private readonly IHttpClientFactory _httpClientFactory;
+		public static User user = new();
 		private readonly UserContext _context;
 
-		public AuthService(IHttpClientFactory httpClientFactory ,UserContext context)
+		public AuthService(UserContext context)
 		{
 			_context = context;
-			_httpClientFactory = httpClientFactory;
 		}
 
 
@@ -44,49 +45,39 @@ namespace Auth.Services
 			return await _context.Users.ToListAsync();
 		}
 
-		public async Task<ActionResult<string>> LogIn(LoginDto login)
+		public async Task<string> LogIn(LoginDto login)
 		{
-			User user = new();
+			//User user = new();
 
-			var findUser = _context.Users.Find(login.Email);
+			var findUser = _context.Users.FirstOrDefault(u => u.Email == login.Email);
 
 			if (findUser == null)
 				return "User not found";
 
 			if (!VerifyPasswordHash(login.Password, user.PasswordHash, user.PasswordSalt))
 			{
-				return null!;
+				return "Incorrect password!!";
 			}
 
 			return "Login Successful";
 		}
 
-		//Verify password
-		private static bool VerifyPasswordHash(string? password, byte[] passwordHash, byte[] passwordSalt)
+		public async Task<string> ResetPassword(ResetPassword request)
 		{
-			using HMACSHA512 hmac = new(passwordSalt);
-			var ComputedHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
-			return ComputedHash == passwordHash;
-		}
+			var findUser = await _context.Users.FirstOrDefaultAsync(x => x.Email == request.Email);
 
-		public async Task<List<User>?> ResetPassword(int id, ResetPasswordDto request)
-		{
-			var user = await _context.Users.FindAsync(id);
+			if (findUser == null)
+				return "User not found";
 
-			CreatePasswordHash(request.NewPassword, out byte[] passwordHash, out byte[] passwordSalt);
+			CreatePasswordHash(request.Password, out byte[] passwordHash, out byte[] passwordSalt);
 
-			if (user == null)
-				return null;
-
-			if (request.NewPassword != request.ConfirmPassword)
-				return null;
 
 			user.PasswordHash = passwordHash;
 			user.PasswordSalt = passwordSalt;
 
 			await _context.SaveChangesAsync();
 
-			return await _context.Users.ToListAsync();
+			return "Password changed successfully!";
 		}
 
 		private static void CreatePasswordHash(string password, out byte[] passwordHash, out byte[] passwordSalt)
@@ -94,6 +85,17 @@ namespace Auth.Services
 			using HMACSHA512 hmac = new();
 			passwordSalt = hmac.Key;
 			passwordHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
+
+		}
+
+		//Verify password
+		private static bool VerifyPasswordHash(string password, byte[] passwordHash, byte[] passwordSalt)
+		{
+			using (HMACSHA512 hmac = new HMACSHA512(passwordSalt))
+			{
+				var ComputedHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
+				return ComputedHash == passwordHash;
+			}
 		}
 	}
 }

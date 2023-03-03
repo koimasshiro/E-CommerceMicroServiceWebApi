@@ -30,36 +30,37 @@ namespace ProductAPI.Controllers
 		{
 			var result = await _productService.GetProductById(id);
 
-			if (result is null)
+			if (result == null)
 				return NotFound("Product not found!!😞");
 
 			return Ok(result);
 		}
 
 		[HttpPost]
-		public async Task<ActionResult<List<Product>>> AddProduct(Product product)
+		public async Task<Product> AddProduct(Product product)
 		{
 			var result = await _productService.AddProduct(product);
-			return Ok(result);
+
+			return result;
 		}
 
 		[HttpPut("{id}")]
-		public async Task<ActionResult<List<Product>>> UpdateProduct(int id, Product request)
+		public async Task<ActionResult<List<Product>>> UpdateProduct(int id, ProductDto request)
 		{
 			var result = await _productService.UpdateProduct(id, request);
 
-			if (result is null)
+			if (result == null)
 				return NotFound("Product not found!!😞");
 
 			return Ok(result);
 		}
 
 		[HttpDelete("{id}")]
-		public async Task<ActionResult<List<Product>>> DeleteProduct(int id)
+		public async Task<ActionResult<string>> DeleteProduct(int id)
 		{
 			var result = await _productService.DeleteProduct(id);
 
-			if (result is null)
+			if (result == null)
 				return NotFound("Product not found😞");
 
 			return Ok(result);

@@ -2,8 +2,9 @@
 {
 	public class ProductDto
 	{
-		public string? ProductName { get; set; }
-		public string? ProductDesc { get; set; }
-		public decimal ProductPrice { get; set; }
+		public string ProductName { get; set; } = string.Empty;
+		public string ProductDesc { get; set; } = string.Empty;
+		public double ProductPrice { get; set; }
 	}
 }
+ 

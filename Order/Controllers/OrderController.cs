@@ -2,7 +2,9 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using OrderAPI.Dto;
 using OrderAPI.Entities;
+using OrderAPI.Services;
 using ProductAPI.Database;
 
 namespace Order.Controllers
@@ -11,79 +13,63 @@ namespace Order.Controllers
 	[ApiController]
 	public class OrderController : ControllerBase
 	{
-		private readonly OrderDbContext _context;
+		private readonly IOrderService _orderService;
 
-		public OrderController(OrderDbContext context)
+		public OrderController(IOrderService order)
 		{
-			_context = context;
+			_orderService = order;
 		}
 
 
 		//Create new order
 		[HttpPost]
-		public async Task<IActionResult> PostAsync(OrderModel newOrder)
-		{ 
-			_context.Orders.Add(newOrder);
-			await _context.SaveChangesAsync();
-			return CreatedAtAction("Get", new
-			{
-				OrderId = newOrder.ProductId,
-			}, newOrder);
+		public async Task<IActionResult> CreateOrder(OrderModel newOrder)
+		{
+			var result = await _orderService.CreateOrder(newOrder);
+
+			return Ok(result);
 		}
 		
 		//Get Orders by Id
 		[HttpGet("{id}")]
-		public async Task<IActionResult> GetAsync(int id)
+		public async Task<dynamic> GetOrderById(int id)
 		{
-			var order = await _context.Orders.FindAsync(id);
-
-			if(order == null)
-				return NotFound();
-
-			return Ok(order);
+			var result =  await _orderService.GetOrderById(id);
+			return result;
 		}
 
 
 		//Get all orders
 		[HttpGet]
-		public async Task<IActionResult> GetAsync()
+		public async Task<dynamic> GetAllOrder()
 		{
-			var orders = await _context.Orders.ToListAsync();
-			return Ok(orders);
+			var result = await _orderService.GetAllOrder();
+
+			return Ok(result);
 		}
 
 		//update an order
 		[HttpPut("{id}")]
-		public async Task<IActionResult> PutAsync(int id, OrderModel request)
+		public async Task<dynamic> UpdateOrder(int id, OrderDto request)
 		{
-			var order = await _context.Orders.FindAsync(id);
+			var result = await _orderService.UpdateOrder(id, request);
 
-			if (order is null)
+			if (result is null)
 				return NotFound("Order not Found");
 
-			order.ProductName = request.ProductName;
-			order.ProductId = request.ProductId;
-			order.OrderDate = request.OrderDate;
-			order.UserId = request.UserId;
-
-			await _context.SaveChangesAsync();
-
-			return Ok(await _context.Orders.ToListAsync());
+			return Ok(result);
 		}
 
 		//Delete an order
 		[HttpDelete("{id}")]
-		public async Task<IActionResult> DeleteAsync(int id)
+		public async Task<dynamic> DeleteOrder(int id)
 		{
-			var order = await _context.Orders.FindAsync(id);
+			var result = await _orderService.DeleteOrder(id);
 
-			if (order is null)
+			if (result is null)
 				return NotFound("Order not found!");
 
-			_context.Orders.Remove(order);
-			await _context.SaveChangesAsync();
-
-			return Ok(await _context.Orders.ToListAsync());
+			return Ok(result);
 		}
 	}
         

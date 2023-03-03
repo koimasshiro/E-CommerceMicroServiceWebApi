@@ -16,11 +16,9 @@ namespace Auth.Controllers
 	{
 
 		private readonly IAuth _auth;
-		private readonly UserContext _context;
 		public AuthController(IAuth auth, UserContext context)
 		{
 			_auth = auth;
-			_context = context;
 		}
 
 		[HttpPost("Signup")]
@@ -31,18 +29,18 @@ namespace Auth.Controllers
 		}
 
 		[HttpPost("Login")]
-		public async Task<ActionResult<dynamic>> LogIn( LoginDto login)
+		public async Task<string> LogIn( LoginDto login)
 		{
 			var result = await _auth.LogIn(login);
 
-			return Ok(result);
+			return result;
 		}
 
 		//reset password
-		[HttpPost]
-		public async Task<List<User>> ResetPassword(int id, ResetPasswordDto request)
+		[HttpPost("Reset-Password")]
+		public async Task<string> ResetPassword(ResetPassword request)
 		{
-			var result = await _auth.ResetPassword(id, request);
+			var result = await _auth.ResetPassword(request);
 
 			return result;
 			

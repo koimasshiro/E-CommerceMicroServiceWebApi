@@ -1,5 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using ProductAPI.Database;
+using ProductAPI.Dtos;
 using ProductAPI.Model;
 
 namespace ProductAPI.Services
@@ -12,24 +14,12 @@ namespace ProductAPI.Services
 			_context = context;
 		}
 
-		public async Task<List<Product>> AddProduct(Product product)
+		public async Task<Product> AddProduct(Product product)
 		{
 			_context.Products.Add(product);
 			await _context.SaveChangesAsync();
-			return await _context.Products.ToListAsync();
-		}
 
-		public async Task<List<Product>>? DeleteProduct(int id)
-		{
-			var product = await _context.Products.FindAsync(id);
-
-			if (product is null)
-				return null;
-
-			_context.Products.Remove(product);
-			await _context.SaveChangesAsync();
-
-			return await _context.Products.ToListAsync();
+			return product;
 		}
 
 		public async Task<List<Product>> GetAllProducts()
@@ -41,17 +31,17 @@ namespace ProductAPI.Services
 		public async Task<Product?> GetProductById(int id)
 		{
 			var product = await _context.Products.FindAsync(id);
-			if (product is null)
+			if (product == null)
 				return null;
 
 			return product;
 		}
 
-		public async Task<List<Product?>> UpdateProduct(int id, Product request)
+		public async Task<ActionResult<List<Product>>> UpdateProduct(int id, ProductDto request)
 		{
 			var product = await _context.Products.FindAsync(id);
 
-			if (product is null)
+			if (product == null)
 				return null;
 
 			product.ProductName = request.ProductName;
@@ -61,6 +51,19 @@ namespace ProductAPI.Services
 			await _context.SaveChangesAsync();
 
 			return await _context.Products.ToListAsync();
+		}
+
+		public async Task<ActionResult<string>> DeleteProduct(int id)
+		{
+			var product = await _context.Products.FindAsync(id);
+
+			if (product == null)
+				return null;
+
+			_context.Products.Remove(product);
+			await _context.SaveChangesAsync();
+
+			return "Product deleted successfully!";
 		}
 	}
 }

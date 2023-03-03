@@ -77,7 +77,7 @@
 		},
 		//Payment
 		{
-			"DownstreamPathTemplate": "/api/Payment",
+			"DownstreamPathTemplate": "/api/Payment/InitializeTransaction",
 			"DownstreamScheme": "https",
 			"DownstreamHostAndPorts": [
 				{
@@ -85,8 +85,20 @@
 					"Port": 7084
 				}
 			],
-			"UpstreamPathTemplate": "/Payment",
-			"UpstreamHttpMethod": [ "GET", "POST" ]
+			"UpstreamPathTemplate": "/Payment/InitializeTransaction",
+			"UpstreamHttpMethod": ["POST" ]
+		},
+		{
+			"DownstreamPathTemplate": "/api/Payment/VerifyTransaction",
+			"DownstreamScheme": "https",
+			"DownstreamHostAndPorts": [
+				{
+					"Host": "localhost",
+					"Port": 7084
+				}
+			],
+			"UpstreamPathTemplate": "/Payment/VerifyTransaction",
+			"UpstreamHttpMethod": [ "GET"]
 		}
 	],
 	"GlobalConfiguration": {

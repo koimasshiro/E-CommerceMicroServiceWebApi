@@ -21,6 +21,7 @@ namespace Auth.Dtos
 		[Required(ErrorMessage = "Email is required")]
 		public string? Email { get; set; } = null;
 
+		[Required, MinLength(6, ErrorMessage = "Please enter at least 6 characters")]
 		public string? Password { get; set; }
 	}
 }

@@ -1,4 +1,5 @@
-﻿using ProductAPI.Dtos;
+﻿using Microsoft.AspNetCore.Mvc;
+using ProductAPI.Dtos;
 using ProductAPI.Model;
 
 namespace ProductAPI.Services
@@ -7,8 +8,8 @@ namespace ProductAPI.Services
 	{
 		Task<List<Product>> GetAllProducts();
 		Task<Product>? GetProductById(int id);
-		Task<List<Product>> AddProduct(Product product);
-		Task<List<Product>>? UpdateProduct(int id, Product request);
-		Task<List<Product>>? DeleteProduct(int id);
+		Task<Product> AddProduct(Product product);
+		Task<ActionResult<List<Product>>>? UpdateProduct(int id, ProductDto request);
+		Task<ActionResult<string>> DeleteProduct(int id);
 	}
 }
